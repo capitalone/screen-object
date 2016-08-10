@@ -1,0 +1,7 @@
+=== Release 0.2
+* Updates
+    Added @current_screen instance variable that points to the current screen when using the on factory method
+
+
+=== Release 0.1
+Initial release
