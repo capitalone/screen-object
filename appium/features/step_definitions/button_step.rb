@@ -1,4 +1,3 @@
-
 Given(/^I am on UICatalog screen$/) do
 
 end
