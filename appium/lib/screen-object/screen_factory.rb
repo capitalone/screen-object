@@ -30,7 +30,6 @@ module ScreenObject
   # to the method.
   #
 
-
   module ScreenFactory
     include PageNavigation
 
