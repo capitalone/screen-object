@@ -1,6 +1,7 @@
 require_relative '../spec_helper'
 
 describe "Interface" do
+  
 
   locator = "name~dummy"
   let(:selenium_driver) {double('')}
@@ -34,6 +35,3 @@ describe "Interface" do
   end
 
 end
-
-
-
