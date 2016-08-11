@@ -12,6 +12,7 @@ See the License for the specific language governing permissions and limitations 
 ***********************************************************************************************************
 =end
 
+
 module ScreenObject
   module AppElements
     class CheckBox < AppElements::Element
@@ -32,8 +33,6 @@ module ScreenObject
         element.click if checked?
       end
       
-       
-
     end
   end
 end
