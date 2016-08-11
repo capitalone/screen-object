@@ -5,6 +5,7 @@ app = ".app"
 appPackage = ""
 appActivity = ""
 
+
 [appium_lib]
 sauce_username = false
 sauce_access_key = false
