@@ -4,6 +4,7 @@ Feature: Button
 
   Background:
     Given I am on UICatalog screen
+    
 
   Scenario: Verify the button exists
     When I verify the existence of the button
