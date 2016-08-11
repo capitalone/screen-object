@@ -23,6 +23,7 @@ module ScreenObject
   class AppiumServer
 
     attr_accessor :process
+    
 
     def initialize(params={})
       @params = params
