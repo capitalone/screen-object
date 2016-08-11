@@ -32,5 +32,6 @@ describe ScreenObject do
       the_screen.wait_until(10, 'foobar') { }
     end
   end
+  
 end
 
