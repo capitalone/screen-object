@@ -140,6 +140,5 @@ module ScreenObject
       end
 
     end
-
   end
 end
