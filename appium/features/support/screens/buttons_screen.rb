@@ -1,5 +1,4 @@
 class ButtonsScreen
-  
   include ScreenObject
 
   text(:title, "xpath~//UIAApplication[1]/UIAWindow[2]/UIANavigationBar[1]/UIAStaticText[1]")
