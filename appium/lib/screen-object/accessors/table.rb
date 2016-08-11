@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and limitations 
 
 module ScreenObject
   module AppElements
+      
     class Table < AppElements::Element
 
       def cell_count
