@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and limitations 
 
 #require_relative File.expand_path('../element',__FILE__)
 
+
 module ScreenObject
   module AppElements
     class Button < AppElements::Element
@@ -33,8 +34,3 @@ module ScreenObject
      end
   end
 end
-
-
-
-
-    
