@@ -18,6 +18,7 @@ describe ScreenObject::AppiumServer do
   def expected_build_params(*params)
     expect(ChildProcess).to receive(:build).with(*params).and_return(@process)
   end
+  
 
   context "when starting the appium server" do
     it 'should start the appium process with no parameters' do
