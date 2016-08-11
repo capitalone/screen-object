@@ -20,8 +20,6 @@ module ScreenObject
         element.click
       end
 
-      
-
     end
   end
 end
