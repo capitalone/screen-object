@@ -32,6 +32,4 @@ describe "Interface" do
     end
   end
 
-
-
 end
