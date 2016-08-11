@@ -3,6 +3,7 @@ require 'screen-object/appium_server'
 
 describe ScreenObject::AppiumServer do
 
+
   let(:the_server) { ScreenObject::AppiumServer.new }
 
   context 'when appium server is started' do
@@ -21,4 +22,3 @@ describe ScreenObject::AppiumServer do
     end
   end
 end
-
