@@ -1,4 +1,5 @@
 #UIAApplication[1]/UIAWindow[2]/UIATableView[1]
+
 Feature: Table
   In order to access the table functionality
   we need to test all the operations
