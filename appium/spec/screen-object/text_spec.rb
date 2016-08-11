@@ -6,6 +6,7 @@ describe "Interface" do
   let(:selenium_driver) {double('')}
   let(:text) {ScreenObject::AppElements::TextField.new(locator)}
 
+
   context "interaction with clear method" do
     it "should clear the text field." do
       expect(text).to receive(:element).and_return(selenium_driver)
