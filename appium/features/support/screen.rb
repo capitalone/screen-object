@@ -1,9 +1,7 @@
 class Screen
-
   include ScreenObject
 
   #ios
-
   button(:ui_catalog, "name~UICatalog")
   button(:no_button, "name~nobutton")
   text(:ui_catalog_text, "xpath~//UIAStaticText[@name='UICatalog']")
@@ -11,7 +9,6 @@ class Screen
   text_field(:no_textfield, "name~notextfield")
   checkbox(:remember, "id~c/rememberMe")
   table(:table_view, 'xpath~UIAApplication[1]/UIAWindow[2]/UIATableView[1]')
-
 
   # Button methods
 
