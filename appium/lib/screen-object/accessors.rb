@@ -435,7 +435,6 @@ module ScreenObject
         define_method("#{name}") do
           ScreenObject::AppElements::Image.new(locator).click
         end
-       
       end
 
       # table class generates all the methods related to different operations that can be performed on the table object on the screen.
