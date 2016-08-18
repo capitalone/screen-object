@@ -7,7 +7,7 @@ require 'rspec/core/rake_task'
 Bundler::GemHelper.install_tasks
 
 
-Rake::Task['release'].clear
+#Rake::Task['release'].clear
 
 
 Cucumber::Rake::Task.new(:features, 'Run the features') do |task|
