@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.authors = ['Sreepad Bhagwat','Shailendra Jain']
   s.license = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-  s.homepage = 'https://github.kdc.capitalone.com/mobius/screen-object'
+  s.homepage = 'https://github.com.com/capitalone/screen-object'
   s.summary = 'Page Object like DSL for testing mobile application'
   s.description = 'Page Object like DSL for testing mobile application'
 
