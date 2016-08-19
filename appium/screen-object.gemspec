@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version = ScreenObject::VERSION
   s.platform = Gem::Platform::RUBY
   s.authors = ['Sreepad Bhagwat','Shailendra Jain']
-  s.license = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+  s.license = 'APACHE 2.0'
   s.homepage = 'https://github.com/capitalone/screen-object'
   s.summary = 'Page Object like DSL for testing mobile application'
   s.description = 'Page Object like DSL for testing mobile application'
