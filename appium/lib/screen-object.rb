@@ -1,5 +1,7 @@
 =begin
 ***********************************************************************************************************
+SPDX-Copyright: Copyright (c) Capital One Services, LLC
+SPDX-License-Identifier: Apache-2.0
 Copyright 2016 Capital One Services, LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
