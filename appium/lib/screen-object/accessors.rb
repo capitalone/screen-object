@@ -168,8 +168,8 @@ module ScreenObject
           ScreenObject::AppElements::Button.new(locator).click_exact_text(text)
         end
 
-        #generates method for scrolling on the screen and click on the button.
-        #This should be used for Android platform.
+        # generates method for scrolling on the screen and click on the button.
+        # This should be used for Android platform.
         # Scroll to the first element with exact target dynamic text or name.
         # this method will not return any value.
         # DSL to scroll on Android application screen and click on button. This method should be used when button text is dynamic. it matches with exact text.
@@ -189,6 +189,20 @@ module ScreenObject
           ScreenObject::AppElements::Button.new(locator).click_dynamic_exact_text(text)
         end
 
+        # returns the underlying ScreenObject element to allow
+        # use of all inherited AppElements::Element methods
+        # this also makes it more consistent with PageObject gem
+        # which provides a _element method for any type of accessor
+        # @return [ScreenObject::AppElements::Button]
+        # button(:login_button,"xpath~//UIButtonField)
+        # def get_login_button_element
+        #   login_button_element # This will not return the underlying ScreenObject::AppElements::Button object
+        #                  which can use all the inherited methods of ScreenObject::AppElements::Element
+        #                  like: .click, .value, .element etc. which are needed in certain cases
+        # end
+        define_method("#{name}_element") do
+          ScreenObject::AppElements::Button.new(locator)
+        end
     end   # end of button class.
 
     # Checkbox class generates all the methods related to different operations that can be performed on the check box on the screen.
@@ -237,12 +251,25 @@ module ScreenObject
           ScreenObject::AppElements::CheckBox.new(locator).checked?
         end
 
+        # returns the underlying ScreenObject element to allow
+        # use of all inherited AppElements::Element methods
+        # this also makes it more consistent with PageObject gem
+        # which provides a _element method for any type of accessor
+        # @return [ScreenObject::AppElements::CheckBox]
+        # checkbox(:remember_me,"xpath~//UICheckBox")
+        # def get_remember_me_element
+        #   remember_me_element # This will not return the underlying ScreenObject::AppElements::CheckBox object
+        #                  which can use all the inherited methods of ScreenObject::AppElements::Element
+        #                  like: .click, .value, .element etc. which are needed in certain cases
+        # end
+        define_method("#{name}_element") do
+          ScreenObject::AppElements::CheckBox.new(locator)
+        end
       end
 
 
       # Text class generates all the methods related to different operations that can be performed on the text object on the screen.
       def text(name,locator)
-
 
         # generates method for clicking button.
         # this method will not return any value.
@@ -331,6 +358,20 @@ module ScreenObject
           ScreenObject::AppElements::Text.new(locator).dynamic_text(text)
         end
 
+        # returns the underlying ScreenObject element to allow
+        # use of all inherited AppElements::Element methods
+        # this also makes it more consistent with PageObject gem
+        # which provides a _element method for any type of accessor
+        # @return [ScreenObject::AppElements::Text]
+        # text(:welcome_text,"xpath~//UITextField")
+        # def get_welcome_text_element
+        #   welcome_text_element # This will not return the underlying ScreenObject::AppElements::Text object
+        #                  which can use all the inherited methods of ScreenObject::AppElements::Element
+        #                  like: .click, .value, .element etc. which are needed in certain cases
+        # end
+        define_method("#{name}_element") do
+          ScreenObject::AppElements::Text.new(locator)
+        end
       end
 
       # text_field class generates all the methods related to different operations that can be performed on the text_field object on the screen.
@@ -395,7 +436,6 @@ module ScreenObject
           ScreenObject::AppElements::TextField.new(locator).value
         end
 
-
         # generates method for checking if button is enabled.
         # this method will return true if button is enabled otherwise false.
         # @example check if 'Submit' button enabled on the screen.
@@ -408,6 +448,20 @@ module ScreenObject
           ScreenObject::AppElements::TextField.new(locator).enabled?
         end
 
+        # returns the underlying ScreenObject element to allow
+        # use of all inherited AppElements::Element methods
+        # this also makes it more consistent with PageObject gem
+        # which provides a _element method for any type of accessor
+        # @return [ScreenObject::AppElements::TextField]
+        # text_field(:username,"xpath~//UITextField")
+        # def get_username_element
+        #   username_element # This will not return the underlying ScreenObject::AppElements::TextField object
+        #                  which can use all the inherited methods of ScreenObject::AppElements::Element
+        #                  like: .click, .value, .element etc. which are needed in certain cases
+        # end
+        define_method("#{name}_element") do
+          ScreenObject::AppElements::TextField.new(locator)
+        end
       end
 
 
@@ -437,6 +491,21 @@ module ScreenObject
         define_method("#{name}") do
           ScreenObject::AppElements::Image.new(locator).click
         end
+
+        # returns the underlying ScreenObject element to allow
+        # use of all inherited AppElements::Element methods
+        # this also makes it more consistent with PageObject gem
+        # which provides a _element method for any type of accessor
+        # @return [ScreenObject::AppElements::Image]
+        # image(:logo,"id~mainLogo")
+        # def get_logo_element
+        #   logo_element # This will not return the underlying ScreenObject::AppElements::Image object
+        #                  which can use all the inherited methods of ScreenObject::AppElements::Element
+        #                  like: .click, .value, .element etc. which are needed in certain cases
+        # end
+        define_method("#{name}_element") do
+          ScreenObject::AppElements::Image.new(locator)
+        end
       end
 
       # table class generates all the methods related to different operations that can be performed on the table object on the screen.
@@ -444,6 +513,21 @@ module ScreenObject
         #generates method for counting total no of cells in table
         define_method("#{name}_cell_count") do
           ScreenObject::AppElements::Table.new(locator).cell_count
+        end
+
+        # returns the underlying ScreenObject element to allow
+        # use of all inherited AppElements::Element methods
+        # this also makes it more consistent with PageObject gem
+        # which provides a _element method for any type of accessor
+        # @return [ScreenObject::AppElements::Table]
+        # table(:monthly_statement,"id~monthStatement")
+        # def get_monthly_statement_element
+        #   monthly_statement_element # This will not return the underlying ScreenObject::AppElements::Table object
+        #                  which can use all the inherited methods of ScreenObject::AppElements::Element
+        #                  like: .click, .value, .element etc. which are needed in certain cases
+        # end
+        define_method("#{name}_element") do
+          ScreenObject::AppElements::Table.new(locator)
         end
       end
 
