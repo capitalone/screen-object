@@ -1,4 +1,4 @@
-require 'spec_helper'
+require_relative '../spec_helper'
 require 'screen-object/appium_server'
 
 describe ScreenObject::AppiumServer do
