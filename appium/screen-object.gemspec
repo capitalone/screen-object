@@ -17,12 +17,11 @@ Gem::Specification.new do |s|
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ['lib']
 
-  #s.add_runtime_dependency 'appium_lib', '~> 7.0', '>= 7.0.0'
-  s.add_runtime_dependency 'appium_lib', '~> 8.0.2'
-  s.add_runtime_dependency 'page_navigation', '~> 0.9'
-  s.add_runtime_dependency 'childprocess', '~> 0.5'
+  s.add_runtime_dependency 'appium_lib', '~> 9.17'
+  s.add_runtime_dependency 'page_navigation', '~> 0.10'
+  s.add_runtime_dependency 'childprocess', '~> 0.9'
 
-  s.add_development_dependency 'cucumber', '~> 1.3', '>= 1.3.0'
-  s.add_development_dependency 'rspec', '~> 3.1', '>= 3.1.0'
+  s.add_development_dependency 'cucumber', '~> 3.1', '>= 3.1.2'
+  s.add_development_dependency 'rspec', '~> 3.8'
 end
 
