@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ['lib']
 
-  s.add_runtime_dependency 'appium_lib', '~> 9.17'
+  s.add_runtime_dependency 'appium_lib', '~> 9.18'
   s.add_runtime_dependency 'page_navigation', '~> 0.10'
   s.add_runtime_dependency 'childprocess', '~> 0.9'
 
