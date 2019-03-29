@@ -28,13 +28,14 @@ require 'screen-object/accessors/element'
 # This module will add instance methods and screen object that you use to define and interact with mobile objects
 
 module ScreenObject
+  attr_reader :driver
+
+  def initialize(driver)
+    @driver = driver
+  end
 
   def self.included(cls)
     cls.extend ScreenObject::Accessors
-  end
-
-  def driver
-    ScreenObject::AppElements::Element.new('').driver
   end
 
   def swipe(start_x,start_y,end_x,end_y,touch_count,duration)
