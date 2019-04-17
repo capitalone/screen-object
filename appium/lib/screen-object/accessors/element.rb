@@ -69,16 +69,31 @@ module ScreenObject
         element.click
       end
 
+      def text
+        element.text
+      end
+
+      def enabled?
+        begin
+          element.enabled?
+        rescue
+          false
+        end
+      end
+
       def value
         element.value
       end
 
       def exists?
         begin
-          element.displayed?
+          driver.manage.timeouts.implicit_wait = 0
+          exists = element.displayed?
         rescue
-          false
+          exists = false
         end
+        driver.manage.timeouts.implicit_wait = 20
+        exists
       end
 
       def element
@@ -175,6 +190,10 @@ module ScreenObject
           scroll_to_exact_text(text)
           element.click
         end
+      end
+
+      def drag_to(target)
+        Appium::TouchAction.new(@driver).long_press(element: element).move_to(element: target).release.perform
       end
 
     end

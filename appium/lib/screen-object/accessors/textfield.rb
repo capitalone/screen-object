@@ -21,21 +21,9 @@ module ScreenObject
       def text=(text)
         element.send_keys text
       end
-
-      def text
-        element.text
-      end
     
       def clear
         element.clear
-      end
-
-      def enabled?
-        begin
-          element.enabled?
-        rescue
-          false
-        end
       end
 
     end

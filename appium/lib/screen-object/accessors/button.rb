@@ -21,18 +21,6 @@ module ScreenObject
   module AppElements
     class Button < AppElements::Element
 
-      def tap
-          element.click
-      end
-
-      def enabled?
-        begin
-          element.enabled?
-        rescue
-          false
-        end
-      end
-
      end
   end
 end

@@ -32,14 +32,16 @@ module ScreenObject
 
   def initialize(driver)
     @driver = driver
+
+    has_expected_element?
   end
 
   def self.included(cls)
     cls.extend ScreenObject::Accessors
   end
 
-  def swipe(start_x,start_y,end_x,end_y,touch_count,duration)
-    driver.swipe(:start_x => start_x, :start_y => start_y, :end_x => end_x, :end_y => end_y,:touchCount => touch_count,:duration => duration)
+  def swipe(start_x, start_y, end_x, end_y, touch_count, duration)
+    driver.swipe(:start_x => start_x, :start_y => start_y, :end_x => end_x, :end_y => end_y, :touchCount => touch_count, :duration => duration)
   end
 
   def landscape
@@ -49,7 +51,7 @@ module ScreenObject
   def portrait
     driver.driver.rotate :portrait
   end
-  
+
   def back
     driver.back
   end
@@ -70,7 +72,7 @@ module ScreenObject
     #pending implementation
   end
 
-  def scroll_down_find(locator,locator_value,num_loop = 15)
+  def scroll_down_find(locator, locator_value, num_loop = 15)
     scr = driver.window_size
     screenHeightStart = (scr.height) * 0.5
     scrollStart = screenHeightStart.to_i
@@ -78,17 +80,17 @@ module ScreenObject
     scrollEnd = screenHeightEnd.to_i
     for i in 0..num_loop
       begin
-        if (driver.find_element(locator,locator_value).displayed?)
+        if (driver.find_element(locator, locator_value).displayed?)
           break
         end
       rescue
-        driver.swipe(:start_x => 0,:start_y => scrollStart,:end_x =>0,:end_y =>scrollEnd,:touchCount => 2,:duration => 0)
+        driver.swipe(:start_x => 0, :start_y => scrollStart, :end_x => 0, :end_y => scrollEnd, :touchCount => 2, :duration => 0)
         false
       end
     end
   end
 
-  def scroll_down_click(locator,locator_value,num_loop = 15)
+  def scroll_down_click(locator, locator_value, num_loop = 15)
     scr = driver.window_size
     screenHeightStart = (scr.height) * 0.5
     scrollStart = screenHeightStart.to_i
@@ -96,18 +98,18 @@ module ScreenObject
     scrollEnd = screenHeightEnd.to_i
     for i in 0..num_loop
       begin
-        if (driver.find_element(locator,locator_value).displayed?)
-          driver.find_element(locator,locator_value).click
+        if (driver.find_element(locator, locator_value).displayed?)
+          driver.find_element(locator, locator_value).click
           break
         end
       rescue
-        driver.swipe(:start_x => 0,:start_y => scrollStart,:end_x =>0,:end_y =>scrollEnd,:touchCount => 2,:duration => 0)
+        driver.swipe(:start_x => 0, :start_y => scrollStart, :end_x => 0, :end_y => scrollEnd, :touchCount => 2, :duration => 0)
         false
       end
     end
   end
 
-  def scroll_up_find(locator,locator_value,num_loop = 15)
+  def scroll_up_find(locator, locator_value, num_loop = 15)
     scr = driver.window_size
     screenHeightStart = (scr.height) * 0.5
     scrollStart = screenHeightStart.to_i
@@ -115,18 +117,18 @@ module ScreenObject
     scrollEnd = screenHeightEnd.to_i
     for i in 0..num_loop
       begin
-        if (driver.find_element(locator,locator_value).displayed?)
+        if (driver.find_element(locator, locator_value).displayed?)
           break
         end
       rescue
-        driver.swipe(:start_x => 0,:start_y => scrollEnd,:end_x =>0,:end_y =>scrollStart,:touchCount => 2,:duration => 0)
+        driver.swipe(:start_x => 0, :start_y => scrollEnd, :end_x => 0, :end_y => scrollStart, :touchCount => 2, :duration => 0)
         false
       end
     end
   end
 
 
-  def scroll_up_click(locator,locator_value,num_loop = 15)
+  def scroll_up_click(locator, locator_value, num_loop = 15)
     scr = driver.window_size
     screenHeightStart = (scr.height) * 0.5
     scrollStart = screenHeightStart.to_i
@@ -134,31 +136,31 @@ module ScreenObject
     scrollEnd = screenHeightEnd.to_i
     for i in 0..num_loop
       begin
-        if (driver.find_element(locator,locator_value).displayed?)
-          driver.find_element(locator,locator_value).click
+        if (driver.find_element(locator, locator_value).displayed?)
+          driver.find_element(locator, locator_value).click
           break
         end
       rescue
-        driver.swipe(:start_x => 0,:start_y => scrollEnd,:end_x =>0,:end_y =>scrollStart,:touchCount => 2,:duration => 0)
+        driver.swipe(:start_x => 0, :start_y => scrollEnd, :end_x => 0, :end_y => scrollStart, :touchCount => 2, :duration => 0)
         false
       end
     end
   end
 
 
-  def drag_and_drop_element(source_locator,source_locator_value,target_locator,target_locator_value)
-    l_draggable = driver.find_element(source_locator,source_locator_value)
-    l_droppable = driver.find_element(target_locator,target_locator_value)
-    obj1= Appium::TouchAction.new
-    obj1.long_press(:x => l_draggable.location.x,:y => l_draggable.location.y).move_to(:x => l_droppable.location.x,:y => l_droppable.location.y).release.perform
+  def drag_and_drop_element(source_locator, source_locator_value, target_locator, target_locator_value)
+    l_draggable = driver.find_element(source_locator, source_locator_value)
+    l_droppable = driver.find_element(target_locator, target_locator_value)
+    obj1 = Appium::TouchAction.new
+    obj1.long_press(:x => l_draggable.location.x, :y => l_draggable.location.y).move_to(:x => l_droppable.location.x, :y => l_droppable.location.y).release.perform
   end
 
   def keyboard_hide
     begin
-    driver.hide_keyboard
+      driver.hide_keyboard
     rescue
       false
     end
   end
-  
+
 end
