@@ -43,6 +43,24 @@ module ScreenObject
         end
       end
 
+      def has_text?(text)
+        items = elements
+        items.each do |item|
+          if item.is_a? String
+            text_value = if driver.device_is_android?
+                           item.text.strip
+                         else
+                           item.value.strip
+                         end
+            return true if text_value.casecmp?(text.strip.to_s)
+          else
+            text_value = item.text
+            return true if text_value == text
+          end
+          false
+        end
+      end
+
     end
   end
 end
