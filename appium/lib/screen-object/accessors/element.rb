@@ -45,6 +45,7 @@ module ScreenObject
       end
 
       def exists?
+        driver.no_wait
         begin
           element.displayed?
         rescue
@@ -106,7 +107,7 @@ module ScreenObject
         x = size.width / 2
         y = size.height / 2
         loc = (case direction
-               when :up then    [x, y * 0.5, x, (y + (y * 0.5)), duration]
+               when :up then    [x, y * 0.5, x, (y + (y * 0.3)), duration]
                when :down then  [x, y, x, y * 0.5, duration]
                when :left then  [x * 0.6, y, x * 0.3, y, duration]
                when :right then [x * 0.3, y, x * 0.6, y, duration]
@@ -116,17 +117,37 @@ module ScreenObject
         gesture(loc)
       end
 
-      def scroll_find(num_loop = 15, direction)
-        driver.manage.timeouts.implicit_wait = 1
-        (0..num_loop).each do |i|
-          begin
-            break if element.displayed?
-          rescue StandardError
-            scroll direction.to_sym
-            false
-          end
-          raise("#{element.locator} is not displayed") if i == num_loop
+      def wait_until(timeout = 5, message = nil, &block)
+        driver.no_wait
+        wait = Selenium::WebDriver::Wait.new(timeout: timeout, message: message)
+        wait.until &block
+        driver.default_wait
+      end
+
+      def element_visible?(direction = :down)
+        p default_wait = driver.default_wait
+        driver.no_wait
+        if element.displayed?
+          driver.set_wait(default_wait)
+          true
+        else
+          scroll(direction)
+          false
         end
+      rescue
+        scroll(direction)
+        false
+      end
+
+      def scroll_element_to_view(direction = :down, time_out = 30)
+        wait_until(time_out,'Unable to find element',&->{element_visible?(direction)})
+        scroll(direction)
+      end
+
+      def scroll_element_to_view_click(direction= :down, time_out = 40)
+        wait_until(time_out,'Unable to find element',&->{element_visible?(direction)})
+        scroll(direction)
+        element.click
       end
 
       def scroll_down
@@ -187,15 +208,6 @@ module ScreenObject
         $driver.scroll_to_exact(text)
       end
 
-      def scroll_for_element_click
-        if element.displayed?
-          element.click
-        else
-          scroll
-          element.click
-        end
-      end
-
       def scroll_for_dynamic_element_click (expected_text)
         if dynamic_xpath(expected_text).displayed?
           element.click
@@ -241,15 +253,6 @@ module ScreenObject
         end
       end
 
-      def scroll_to_view(direction)
-        scroll_find(direction)
-      end
-
-      def scroll_to_view_click(direction = :down)
-        scroll_find(direction)
-        element.click
-      end
-
       def has_text(text)
         items = elements
         items.each do |item|
@@ -259,7 +262,6 @@ module ScreenObject
         msg = "Unable to find element with text: #{text}"
         raise(msg)
       end
-
     end
   end
 end

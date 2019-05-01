@@ -83,11 +83,25 @@ module ScreenObject
         #  login_button_scroll # This will not return any value. It will scroll on the screen until object found and click
         #                        on the object i.e. button. This is iOS specific method and should not be used for android application
         # end
-        define_method("#{name}_scroll") do
+        define_method("scroll_down_to_click_#{name}") do
           # direction = options[:direction] || 'down'
           ScreenObject::AppElements::Button.new(locator).scroll_for_element_click
         end
 
+        define_method("scroll_up_to_click_#{name}") do
+          # direction = options[:direction] || 'up'
+          ScreenObject::AppElements::Button.new(locator).scroll_for_element_click(:up)
+        end
+
+        define_method("scroll_down_to_#{name}") do
+          # direction = options[:direction] || 'down', 'up'
+          ScreenObject::AppElements::Button.new(locator).scroll_element_to_view
+        end
+
+        define_method("scroll_up_to_#{name}") do
+          # direction = options[:direction] || 'down', 'up'
+          ScreenObject::AppElements::Button.new(locator).scroll_element_to_view(:up)
+        end
         # generates method for scrolling on iOS application screen and click on button. This method should be used when button text is dynamic..
         # this should be used for iOS platform.
         # scroll to the first element with exact target dynamic text or name.
@@ -126,21 +140,6 @@ module ScreenObject
         define_method("#{name}_scroll_") do |text|
           ScreenObject::AppElements::Button.new(locator).click_text(text)
         end
-
-        # generates method for scrolling on the screen and click on the button.
-        # this can be used for both iOS and Android platforms.
-        # scroll to the first element with exact target static text or name.
-        # this method will not return any value.
-        # button(:login_button,"xpath~//UIButtonField")
-        # def scroll_button
-        #  scroll_click_login_button :down # This will not return any value. It will scroll on the screen until object found and click
-        #                        on the object i.e. button. This is iOS specific method and should not be used for android application
-        # end
-        define_method("scroll_click_#{name}") do |direction|
-          # direction = options[:direction] || 'down'
-          ScreenObject::AppElements::Button.new(locator).scroll_for_element_click(name.to_s, direction)
-        end
-
 
         # generates method for scrolling on Android application screen and click on button. This method should be used when button text is dynamic......
         # this should be used for Android platform.
@@ -284,6 +283,26 @@ module ScreenObject
         define_method("#{name}_element") do
           ScreenObject::AppElements::CheckBox.new(locator)
         end
+
+        define_method("scroll_down_to_click_#{name}") do
+          # direction = options[:direction] || 'down'
+          ScreenObject::AppElements::CheckBox.new(locator).scroll_for_element_click
+        end
+
+        define_method("scroll_up_to_click_#{name}") do
+          # direction = options[:direction] || 'up'
+          ScreenObject::AppElements::CheckBox.new(locator).scroll_for_element_click(:up)
+        end
+
+        define_method("scroll_down_to_#{name}") do
+          # direction = options[:direction] || 'down', 'up'
+          ScreenObject::AppElements::CheckBox.new(locator).scroll_element_to_view
+        end
+
+        define_method("scroll_up_to_#{name}") do
+          # direction = options[:direction] || 'down', 'up'
+          ScreenObject::AppElements::CheckBox.new(locator).scroll_element_to_view(:up)
+        end
       end
 
 
@@ -344,14 +363,14 @@ module ScreenObject
           ScreenObject::AppElements::Text.new(locator).text
         end
 
-        define_method("scroll_up_click_#{name}") do
+        define_method("scroll_up_to_click_#{name}") do
           # direction = options[:direction] || 'up'
-          ScreenObject::AppElements::Text.new(locator).scroll_to_view_click(:up)
+          ScreenObject::AppElements::Text.new(locator).scroll_element_to_view_click(:up)
         end
 
-        define_method("scroll_down_click_#{name}") do
+        define_method("scroll_down_to_click_#{name}") do
           # direction = options[:direction] || 'down'
-          ScreenObject::AppElements::Text.new(locator).scroll_to_view_click(:down)
+          ScreenObject::AppElements::Text.new(locator).scroll_element_to_view_click(:down)
         end
 
         # generates method for scrolling text object to view.
@@ -364,12 +383,12 @@ module ScreenObject
         # end
         define_method("scroll_down_to_#{name}") do
           # direction = options[:direction] || 'down'
-          ScreenObject::AppElements::Text.new(locator).scroll_to_view(:down)
+          ScreenObject::AppElements::Text.new(locator).scroll_element_to_view(:down)
         end
 
         define_method("scroll_up_to_#{name}") do
           # direction = options[:direction] || 'down'
-          ScreenObject::AppElements::Text.new(locator).scroll_to_view(:up)
+          ScreenObject::AppElements::Text.new(locator).scroll_element_to_view(:up)
         end
 
         # generates method for checking dynamic text object.
@@ -530,6 +549,16 @@ module ScreenObject
         define_method("#{name}_elements") do
           ScreenObject::AppElements::TextField.new(locator).elements
         end
+
+        define_method("scroll_down_to_#{name}") do
+          # direction = options[:direction] || 'down'
+          ScreenObject::AppElements::TextField.new(locator).scroll_element_to_view
+        end
+
+        define_method("scroll_up_to_#{name}") do
+          # direction = options[:direction] || 'up'
+          ScreenObject::AppElements::TextField.new(locator).scroll_element_to_view(:up)
+        end
       end
 
 
@@ -577,12 +606,12 @@ module ScreenObject
 
         define_method("scroll_down_to_#{name}") do
           # direction = options[:direction] || 'down'
-          ScreenObject::AppElements::Image.new(locator).scroll_to_view(:down)
+          ScreenObject::AppElements::Image.new(locator).scroll_element_to_view(:down)
         end
 
         define_method("scroll_up_to_#{name}") do
           # direction = options[:direction] || 'down'
-          ScreenObject::AppElements::Image.new(locator).scroll_to_view(:up)
+          ScreenObject::AppElements::Image.new(locator).scroll_element_to_view(:up)
         end
       end
 
@@ -616,13 +645,17 @@ module ScreenObject
           ScreenObject::AppElements::Element.new(locator)
         end
 
+        define_method("#{name}?") do
+          ScreenObject::AppElements::Element.new(locator).exists?
+        end
+
         define_method("#{name}_elements") do
           ScreenObject::AppElements::Element.new(locator).elements
         end
 
         define_method("click_#{name}") do
           # direction = options[:direction] || 'down'
-          ScreenObject::AppElements::Element.new(locator).scroll_to_view_click
+          ScreenObject::AppElements::Element.new(locator).scroll_element_to_view_click
         end
 
         # generates method for scrolling down on both Android and iOS application screen and click on element.
@@ -633,17 +666,17 @@ module ScreenObject
 
         define_method("scroll_up_click_#{name}") do
           # direction = options[:direction] || 'up'
-          ScreenObject::AppElements::Element.new(locator).scroll_to_view_click(:up)
+          ScreenObject::AppElements::Element.new(locator).scroll_element_to_view_click(:up)
         end
 
         define_method("scroll_down_to_#{name}") do
           # direction = options[:direction] || 'down'
-          ScreenObject::AppElements::Element.new(locator).scroll_to_view(:down)
+          ScreenObject::AppElements::Element.new(locator).scroll_element_to_view(:down)
         end
 
         define_method("scroll_up_to_#{name}") do
           # direction = options[:direction] || 'up'
-          ScreenObject::AppElements::Element.new(locator).scroll_to_view(:up)
+          ScreenObject::AppElements::Element.new(locator).scroll_element_to_view(:up)
         end
         # generates method for scrolling a specific element on screen
         # This can be used for both IOS and Android platform.

@@ -54,10 +54,11 @@ module ScreenObject
   end
 
   def wait_until(timeout = 5, message = nil, &block)
+    default_wait = driver.default_wait
     driver.no_wait
     wait = Selenium::WebDriver::Wait.new(timeout: timeout, message: message)
     wait.until &block
-    driver.set_wait
+    driver.set_wait(default_wait)
   end
 
   def wait_step(timeout = 5, message = nil, &block)
