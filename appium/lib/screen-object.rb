@@ -54,10 +54,10 @@ module ScreenObject
   end
 
   def wait_until(timeout = 5, message = nil, &block)
-    default_wait = driver.default_wait
+    driver.no_wait
     wait = Selenium::WebDriver::Wait.new(timeout: timeout, message: message)
     wait.until &block
-    driver.set_wait(default_wait)
+    driver.set_wait
   end
 
   def wait_step(timeout = 5, message = nil, &block)
@@ -87,7 +87,7 @@ module ScreenObject
           when :left then  [x * 0.6, y, x * 0.3, y, duration]
           when :right then [x * 0.3, y, x * 0.6, y, duration]
           else
-            raise('Only up, down, left and right scrolling is supported')
+            raise('Only up, down, left and right scrolling are supported')
           end
     gesture(loc)
   end
@@ -121,7 +121,7 @@ module ScreenObject
           when :left then  [end_x * 0.9,  end_y - (height / 2), start_x, end_y - (height / 2), duration]
           when :right then [end_x * 0.1, end_y - (height / 2), end_x * 0.9, end_y - (height / 2), duration]
           else
-            raise('Only up, down, left and right scrolling is supported')
+            raise('Only up, down, left and right scrolling are supported')
           end
     gesture(loc)
   end
@@ -183,6 +183,7 @@ module ScreenObject
   #example: wait_until(timeout,'Unable to find element',&->{element_visible?(element, direction)})
   def scroll_element_to_view(element, direction, time_out)
     wait_until(time_out,'Unable to find element',&->{element_visible?(element, direction)})
+    scroll(direction)
   end
 
   def drag_and_drop_element(source_locator,source_locator_value,target_locator,target_locator_value)
