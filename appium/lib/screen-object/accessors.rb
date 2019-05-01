@@ -620,7 +620,7 @@ module ScreenObject
           ScreenObject::AppElements::Element.new(locator).elements
         end
 
-        define_method("click_on_#{name}") do
+        define_method("click_#{name}") do
           # direction = options[:direction] || 'down'
           ScreenObject::AppElements::Element.new(locator).scroll_to_view_click
         end

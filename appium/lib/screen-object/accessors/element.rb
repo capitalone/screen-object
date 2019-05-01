@@ -116,6 +116,19 @@ module ScreenObject
         gesture(loc)
       end
 
+      def scroll_find(num_loop = 15, direction)
+        driver.manage.timeouts.implicit_wait = 1
+        (0..num_loop).each do |i|
+          begin
+            break if element.displayed?
+          rescue StandardError
+            scroll direction.to_sym
+            false
+          end
+          raise("#{element.locator} is not displayed") if i == num_loop
+        end
+      end
+
       def scroll_down
         scroll(:down)
       end
@@ -226,6 +239,15 @@ module ScreenObject
           scroll_to_exact_text(text)
           element.click
         end
+      end
+
+      def scroll_to_view(direction)
+        scroll_find(direction)
+      end
+
+      def scroll_to_view_click(direction = :down)
+        scroll_find(direction)
+        element.click
       end
 
       def has_text(text)
