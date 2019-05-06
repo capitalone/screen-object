@@ -78,6 +78,10 @@ module ScreenObject
     raise("Error during gesture \n Error Details: #{e}")
   end
 
+  # Scrolls device screen in a direction
+  #
+  # @param direction [symbol] The direction to search for an string
+  # @param duration   [Integer] The amount of times in seconds we want to scroll to find the element
   def scroll(direction = :down, duration = 1000)
     size = driver.window_size
     x = size.width / 2
@@ -109,7 +113,12 @@ module ScreenObject
     scroll(:right)
   end
 
-  def swipe_element(locator, direction = :down, duration = 1000)
+  # Swipe a screen element Down, Up, Left and Right direction
+  #
+  # @param locator      [Screen-object] The screen element you are looking for on the screen
+  # @param direction    [symbol] By default is down. up, left amd right are also available
+  # @param duration     [integer] The timeout value for element you are looking for on the screen
+  def swipe_screen_element(locator, direction = :down, duration = 1000)
     my_element = driver.find_element(locator.locator.first, locator.locator.last).rect
     start_x = my_element.x
     end_x = my_element.x + my_element.width
@@ -149,7 +158,6 @@ module ScreenObject
   # @return          [Boolean]
   def scroll_text_to_view(text, direction = :down, timeout = 40)
     wait_until(timeout,'Unable to find element',&->{text_visible?(text, direction)})
-    scroll(direction)
   end
 
   # Scrolls in a direction if a text that matches is not found. return false,  otherwise return true
@@ -158,7 +166,13 @@ module ScreenObject
   # @param direction [symbol] The direction to search for an string
   # @return          [Boolean]
   def text_visible?(text, direction)
-    driver.find(text).displayed?
+    if driver.find(text).displayed?
+      scroll(direction)
+      true
+    else
+      scroll(direction)
+      false
+    end
   rescue Selenium::WebDriver::Error::NoSuchElementError
     scroll(direction)
     false
@@ -169,8 +183,14 @@ module ScreenObject
   # @param element   [Element] The text you are looking for on the screen
   # @param direction [symbol] The direction to search for an string
   # @return          [Boolean]
-  def element_visible?(element, direction = :down)
-    driver.find_element("#{element.locator[0]}", "#{element.locator[1]}").displayed?
+  def element_visible?(element={}, direction = :down)
+    if driver.find_element("#{element.keys.first}", "#{element.values.first}").displayed?
+      scroll(direction)
+      true
+    else
+      scroll(direction)
+      false
+    end
   rescue Selenium::WebDriver::Error::NoSuchElementError
     scroll(direction)
     false
@@ -178,13 +198,12 @@ module ScreenObject
 
   # Scrolls in a direction until an element that matches is found,  or return false
   #
-  # @param element   [Element] The text you are looking for on the screen
-  # @param direction [symbol] The direction to search for an string
+  # @param element   [Element] The element you are looking for on the screen
+  # @param direction [symbol] The direction to search for the element
   # @return          [Boolean]
-  #example: wait_until(timeout,'Unable to find element',&->{element_visible?(element, direction)})
+  #example: scroll_element_to_view(element, :down, 40 )})
   def scroll_element_to_view(element, direction, time_out)
     wait_until(time_out,'Unable to find element',&->{element_visible?(element, direction)})
-    scroll(direction)
   end
 
   def drag_and_drop_element(source_locator,source_locator_value,target_locator,target_locator_value)

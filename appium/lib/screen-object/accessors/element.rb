@@ -23,7 +23,7 @@ module ScreenObject
 
       def initialize(locator)
         if locator.is_a?(String)
-          warn "#{DateTime.now.strftime("%F %T")} WARN ScreenObject Element [DEPRECATION] Passing the locator as a single string with locator type and value sepaarted by ~ is deprecated and will no longer work in version 2.0.0. Use a hash instead (ex: button(:login, id: 'button_id') lib/screen-object/accessors/element.rb:#{__LINE__}"
+          #warn "#{DateTime.now.strftime("%F %T")} WARN ScreenObject Element [DEPRECATION] Passing the locator as a single string with locator type and value sepaarted by ~ is deprecated and will no longer work in version 2.0.0. Use a hash instead (ex: button(:login, id: 'button_id') lib/screen-object/accessors/element.rb:#{__LINE__}"
           @locator=locator.split("~")
         elsif locator.is_a?(Hash)
           @locator=locator.first
@@ -255,12 +255,21 @@ module ScreenObject
 
       def has_text(text)
         items = elements
+        text_value = ''
         items.each do |item|
-          text_value = item.attribute('text').strip
-          return item if text_value.casecmp?(text.strip.to_s)
+          if item.is_a? String
+            text_value = if driver.device_is_android?
+                           item.text.strip
+                         else
+                           item.value.strip
+                         end
+            return true if text_value.casecmp?(text.strip.to_s)
+          else
+            text_value = item.text
+            return true if text_value == text
+          end
+          false
         end
-        msg = "Unable to find element with text: #{text}"
-        raise(msg)
       end
     end
   end
