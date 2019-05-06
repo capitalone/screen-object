@@ -65,6 +65,8 @@ module ScreenObject
         %w[name resource-id value text]
       end
 
+      # method for returning element position and size.
+      # @return [hash]
       def get_position
         my_element = element.rect
         {
@@ -96,77 +98,48 @@ module ScreenObject
         end
       end
 
-      def gesture(args)
-        Appium::TouchAction.new($driver).swipe(start_x: args[0], start_y: args[1], end_x: args[2], end_y: args[3], duration: args[4]).perform
-      rescue RuntimeError => e
-        raise("Error during gesture in element.rb\n Error Details: #{e}")
-      end
-
-      def scroll(direction = :down, duration = 1000)
-        size = driver.window_size
-        x = size.width / 2
-        y = size.height / 2
-        loc = (case direction
-               when :up then    [x, y * 0.5, x, (y + (y * 0.3)), duration]
-               when :down then  [x, y, x, y * 0.5, duration]
-               when :left then  [x * 0.6, y, x * 0.3, y, duration]
-               when :right then [x * 0.3, y, x * 0.6, y, duration]
-               else
-                 raise('Only upwards, downwards, leftwards and rightwards scrolling are supported')
-               end)
-        gesture(loc)
-      end
-
-      def wait_until(timeout = 5, message = nil, &block)
-        driver.no_wait
-        wait = Selenium::WebDriver::Wait.new(timeout: timeout, message: message)
-        wait.until &block
-        driver.default_wait
-      end
-
+      # method for checking if element is visible.
+      # Some locators on ios and android return true/false but a few would generate and error.
+      # this is the reason why there is a else condition and a rescue.
+      # @param [direction] 'default :down, :up'
+      # @return [boolean]
       def element_visible?(direction = :down)
-        p default_wait = driver.default_wait
+        default_wait = driver.default_wait
         driver.no_wait
-        if element.displayed?
+        if exists?
           driver.set_wait(default_wait)
+          ScreenObject::Accessors.scroll(direction)
           true
         else
-          scroll(direction)
+          ScreenObject::Accessors.scroll(direction)
           false
         end
       rescue
-        scroll(direction)
+        ScreenObject::Accessors.scroll(direction)
         false
       end
 
+      # method for scrolling until element is visible.
+      # this will NOT return any value.
+      # @param [direction] 'Down', 'up'
       def scroll_element_to_view(direction = :down, time_out = 30)
-        wait_until(time_out,'Unable to find element',&->{element_visible?(direction)})
-        scroll(direction)
+        ScreenObject::Accessors.wait_until(time_out,'Unable to find element',&->{element_visible?(direction)})
       end
 
+      # method for scrolling until element is visible and click.
+      # this will NOT return any value.
+      # @param [direction] 'Down', 'up'
       def scroll_element_to_view_click(direction= :down, time_out = 40)
-        wait_until(time_out,'Unable to find element',&->{element_visible?(direction)})
-        scroll(direction)
-        element.click
+        ScreenObject::Accessors.wait_until(time_out,'Unable to find element',&->{element_visible?(direction)})
+        click
       end
 
-      def scroll_down
-        scroll(:down)
-      end
+      # method for swiping a specific element on the screen.
+      # this is the reason why there is a else condition and a rescue.
+      # @param [direction] :down, :up , :left, :right
+      # @param [duration] 1000 milliseconds
 
-      def scroll_up
-        scroll(:up)
-      end
-
-      def swipe_left
-        scroll(:left)
-      end
-
-      def swipe_right
-        scroll(:right)
-      end
-
-      def swipe_my_element(direction = :down, duration = 1000)
+      def swipe_screen_element(direction = :down, duration = 1000)
         my_element = element.rect
         start_x = my_element.x
         end_x = my_element.x + my_element.width
@@ -181,57 +154,40 @@ module ScreenObject
               else
                 raise('Only upwards and downwards scrolling are supported')
               end
-        gesture(loc)
+        ScreenObject::Accessors.gesture(loc)
       end
 
       def scroll_element_down
-        swipe_my_element(:down)
+        swipe_screen_element(:down)
       end
 
       def scroll_element_up
-        swipe_my_element(:up)
+        swipe_screen_element(:up)
       end
 
       def swipe_element_left
-        swipe_my_element(:left, 2000)
+        swipe_screen_element(:left, 2000)
       end
 
       def swipe_element_right
-        swipe_my_element(:right, 2000)
-      end
-
-      def scroll_to_text(text)
-        $driver.scroll_to(text)
-      end
-
-      def scroll_to_exact_text(text)
-        $driver.scroll_to_exact(text)
+        swipe_screen_element(:right, 2000)
       end
 
       def scroll_for_dynamic_element_click (expected_text)
         if dynamic_xpath(expected_text).displayed?
-          element.click
-        else
-          scroll
-          element.click
-        end
-      end
-
-      def click_text(text)
-        if exists?
           click
         else
-          scroll_to_text(text)
-          element.click
+          ScreenObject::Accessors.scroll
+          click
         end
       end
 
       def click_dynamic_text(text)
         if dynamic_text_exists?(text)
-          element.click
+          click
         else
           scroll_to_text(text)
-          element.click
+          click
         end
       end
 
@@ -239,23 +195,22 @@ module ScreenObject
         if exists?
           click
         else
-          scroll_to_exact_text(text)
-          element.click
+          driver.scroll_to(text)
+          click
         end
       end
 
       def click_dynamic_exact_text(text)
         if dynamic_text_exists?(text)
-          element.click
+          click
         else
           scroll_to_exact_text(text)
-          element.click
+          click
         end
       end
 
       def has_text(text)
         items = elements
-        text_value = ''
         items.each do |item|
           if item.is_a? String
             text_value = if driver.device_is_android?

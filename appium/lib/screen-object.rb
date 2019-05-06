@@ -113,29 +113,6 @@ module ScreenObject
     scroll(:right)
   end
 
-  # Swipe a screen element Down, Up, Left and Right direction
-  #
-  # @param locator      [Screen-object] The screen element you are looking for on the screen
-  # @param direction    [symbol] By default is down. up, left amd right are also available
-  # @param duration     [integer] The timeout value for element you are looking for on the screen
-  def swipe_screen_element(locator, direction = :down, duration = 1000)
-    my_element = driver.find_element(locator.locator.first, locator.locator.last).rect
-    start_x = my_element.x
-    end_x = my_element.x + my_element.width
-    start_y = my_element.y
-    end_y = my_element.y + my_element.height
-    height = my_element.height
-    loc = case direction
-          when :up then [end_x * 0.5, (start_y + (height * 0.2)), end_x * 0.5, (end_y - (height * 0.2)), duration]
-          when :down then  [end_x * 0.5, (end_y - (height * 0.2)), start_x * 0.5, (start_y + (height * 0.3)), duration]
-          when :left then  [end_x * 0.9,  end_y - (height / 2), start_x, end_y - (height / 2), duration]
-          when :right then [end_x * 0.1, end_y - (height / 2), end_x * 0.9, end_y - (height / 2), duration]
-          else
-            raise('Only up, down, left and right scrolling are supported')
-          end
-    gesture(loc)
-  end
-
   # Scroll Down in a direction until a string that matches is found,
   #
   # @param text      [String] The text you are looking for on the screen
@@ -161,8 +138,9 @@ module ScreenObject
   end
 
   # Scrolls in a direction if a text that matches is not found. return false,  otherwise return true
-  #
-  # @param text   [String] The text you are looking for on the screen
+  # Some locators on ios and android return true/false but a few would generate and error.
+  # this is the reason why there is a else condition and a rescue.
+  # @param text       [String] The text you are looking for on the screen
   # @param direction [symbol] The direction to search for an string
   # @return          [Boolean]
   def text_visible?(text, direction)
@@ -176,34 +154,6 @@ module ScreenObject
   rescue Selenium::WebDriver::Error::NoSuchElementError
     scroll(direction)
     false
-  end
-
-  # Scrolls in a direction if an element that matches is not found. return false,  otherwise return true
-  #
-  # @param element   [Element] The text you are looking for on the screen
-  # @param direction [symbol] The direction to search for an string
-  # @return          [Boolean]
-  def element_visible?(element={}, direction = :down)
-    if driver.find_element("#{element.keys.first}", "#{element.values.first}").displayed?
-      scroll(direction)
-      true
-    else
-      scroll(direction)
-      false
-    end
-  rescue Selenium::WebDriver::Error::NoSuchElementError
-    scroll(direction)
-    false
-  end
-
-  # Scrolls in a direction until an element that matches is found,  or return false
-  #
-  # @param element   [Element] The element you are looking for on the screen
-  # @param direction [symbol] The direction to search for the element
-  # @return          [Boolean]
-  #example: scroll_element_to_view(element, :down, 40 )})
-  def scroll_element_to_view(element, direction, time_out)
-    wait_until(time_out,'Unable to find element',&->{element_visible?(element, direction)})
   end
 
   def drag_and_drop_element(source_locator,source_locator_value,target_locator,target_locator_value)

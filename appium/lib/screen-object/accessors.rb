@@ -437,8 +437,8 @@ module ScreenObject
         # this will NOT return any value.
         # @example check if 'Welcome' text is displayed on the page
         # text(:welcome_text,"xpath~//UITextField")
-        # DSL for clicking the Welcome text.
-        # def click_welcome_text
+        # DSL for scrolling down to the Welcome text.
+        # def scroll_welcome_text
         #   scroll_down_to_welcome_text  # This will scroll down to the Welcome text on the screen.
         # end
         define_method("scroll_down_to_#{name}") do
@@ -450,8 +450,8 @@ module ScreenObject
         # this will NOT return any value.
         # @example check if 'Welcome' text is displayed on the page
         # text(:welcome_text,"xpath~//UITextField")
-        # DSL for clicking the Welcome text.
-        # def click_welcome_text
+        # DSL for scrolling down to the Welcome text.
+        # def scroll_welcome_text
         #   scroll_up_to_welcome_text  # This will scroll down to the Welcome text on the screen.
         # end
         define_method("scroll_up_to_#{name}") do
@@ -716,6 +716,31 @@ module ScreenObject
         # direction = options[:direction] || 'down'
         ScreenObject::AppElements::Image.new(locator).scroll_element_to_view(:up)
       end
+
+      # generates method for scrolling on the screen and click on the button.
+      # scroll to the first element with locator and click.
+      # this method will not return any value.
+      # image(:login_image,"xpath~//UIButtonField")
+      # def scroll_down_image
+      #  scroll_down_to_click_login_image # This will not return any value. It will scroll on the screen until object found and click
+      #                        on the object i.e. Image.                  on the object i.e. image.
+      define_method("scroll_down_to_click_#{name}") do
+        # direction = 'down'
+        ScreenObject::AppElements::Image.new(locator).scroll_element_to_view_click
+      end
+
+      # generates method for scrolling on the screen and click on the image.
+      # scroll to the first element with locator and click.
+      # this method will not return any value.
+      # image(:login_image,"xpath~//UIButtonField")
+      # def scroll_image
+      #  scroll_up_to_click_login_image # This will not return any value. It will scroll on the screen until object found and click
+      #                        on the object i.e. Image.
+      define_method("scroll_up_to_click_#{name}") do
+        # direction = 'up'
+        ScreenObject::AppElements::Image.new(locator).scroll_element_to_view_click(:up)
+      end
+
     end
 
     # table class generates all the methods related to different operations that can be performed on the table object on the screen.
