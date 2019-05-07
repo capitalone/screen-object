@@ -182,33 +182,6 @@ module ScreenObject
         end
       end
 
-      def click_dynamic_text(text)
-        if dynamic_text_exists?(text)
-          click
-        else
-          scroll_to_text(text)
-          click
-        end
-      end
-
-      def click_exact_text(text)
-        if exists?
-          click
-        else
-          driver.scroll_to(text)
-          click
-        end
-      end
-
-      def click_dynamic_exact_text(text)
-        if dynamic_text_exists?(text)
-          click
-        else
-          scroll_to_exact_text(text)
-          click
-        end
-      end
-
       def has_text(text)
         items = elements
         items.each do |item|

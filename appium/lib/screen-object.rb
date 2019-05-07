@@ -156,6 +156,33 @@ module ScreenObject
     false
   end
 
+  def click_dynamic_text(text)
+    if dynamic_text_exists?(text)
+      click
+    else
+      scroll_text_to_view(text)
+      click
+    end
+  end
+
+  def click_exact_text(text)
+    if exists?
+      click
+    else
+      driver.scroll_to(text)
+      click
+    end
+  end
+
+  def click_dynamic_exact_text(text)
+    if dynamic_text_exists?(text)
+      click
+    else
+      scroll_text_to_view(text)
+      click
+    end
+  end
+
   def drag_and_drop_element(source_locator,source_locator_value,target_locator,target_locator_value)
     l_draggable = driver.find_element(source_locator,source_locator_value)
     l_droppable = driver.find_element(target_locator,target_locator_value)
