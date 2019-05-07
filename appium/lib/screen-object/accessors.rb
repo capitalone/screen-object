@@ -649,6 +649,30 @@ module ScreenObject
           # direction = 'up'
           ScreenObject::AppElements::TextField.new(locator).scroll_element_to_view(:up)
         end
+
+        # generates method for scrolling on the screen and click on the text field.
+        # scroll to the first element with locator and click to set focus.
+        # this method will not return any value.
+        # text(:welcome_textfield,"xpath~//UITextField")
+        # def scroll_welcome_text_field
+        #  scroll_down_to_click_welcome_textfield # This will not return any value. It will scroll on the screen until object found and click
+        #                        on the object i.e.textField                 on the object i.e. image.
+        define_method("scroll_down_to_click_#{name}") do
+          # direction = 'down'
+          ScreenObject::AppElements::TextField.new(locator).scroll_element_to_view_click
+        end
+
+        # generates method for scrolling on the screen and click on the image.
+        # scroll to the first element with locator and click to set focus.
+        # this method will not return any value.
+        # text(:welcome_textfield,"xpath~//UITextField")
+        # def scroll_welcome_text_field
+        #  scroll_up_to_click_welcome_textfield  # This will not return any value. It will scroll on the screen until object found and click
+        #                        on the object i.e.textField.
+        define_method("scroll_up_to_click_#{name}") do
+          # direction = 'up'
+          ScreenObject::AppElements::TextField.new(locator).scroll_element_to_view_click(:up)
+        end
       end
 
     # Image class generates all the methods related to different operations that can be performed on the image object on the screen.

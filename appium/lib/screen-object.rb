@@ -156,28 +156,6 @@ module ScreenObject
     false
   end
 
-  # Find the first element containing value
-  # @param value [String] the value to search for
-  # @return [Element]
-  def get_element_by_text(value)
-    if value.to_s.strip.empty?
-      raise('parameter for get_element_by_text function cannot be empty string')
-    else
-      driver.find(value)
-    end
-  end
-
-  # Find the first element exactly matching value
-  # @param value [String] the value to search for
-  # @return [Element]
-  def get_element_by_exact_text(value)
-    if value.to_s.strip.empty?
-      raise('parameter for get_element_by_exact_text function cannot be empty string')
-    else
-      driver.find_exact(value)
-    end
-  end
-
   # Create an object to exactly match the first element with target value
   # @param value [String] the value to search for
   # @return [String]
@@ -191,16 +169,15 @@ module ScreenObject
   # @param text [String] the value to search for
   # @return [Nil]
   def click_text(text)
-    get_element_by_text(text).click
+    ScreenObject::Accessors::Element.get_element_by_text(text).click
   end
 
   # Click exact text that matches the first element with target value
   # @param text [String] the value to search for
   # @return [Nil]
   def click_exact_text(text)
-    get_element_by_exact_text(text).click
+    ScreenObject::Accessors::Element.get_element_by_exact_text(text).click
   end
-
 
   def drag_and_drop_element(source_locator,source_locator_value,target_locator,target_locator_value)
     l_draggable = driver.find_element(source_locator,source_locator_value)

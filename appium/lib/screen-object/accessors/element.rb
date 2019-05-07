@@ -182,6 +182,28 @@ module ScreenObject
         end
       end
 
+      # Find the first element containing value
+      # @param value [String] the value to search for
+      # @return [Element]
+      def get_element_by_text(value)
+        if value.to_s.strip.empty?
+          raise('parameter for get_element_by_text function cannot be empty string')
+        else
+          driver.find(value)
+        end
+      end
+
+      # Find the first element exactly matching value
+      # @param value [String] the value to search for
+      # @return [Element]
+      def get_element_by_exact_text(value)
+        if value.to_s.strip.empty?
+          raise('parameter for get_element_by_exact_text function cannot be empty string')
+        else
+          driver.find_exact(value)
+        end
+      end
+
       def has_text(text)
         items = elements
         items.each do |item|
