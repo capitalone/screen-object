@@ -23,7 +23,7 @@ module ScreenObject
 
       def initialize(locator)
         if locator.is_a?(String)
-          warn "#{DateTime.now.strftime("%F %T")} WARN ScreenObject Element [DEPRECATION] Passing the locator as a single string with locator type and value sepaarted by ~ is deprecated and will no longer work in version 2.0.0. Use a hash instead (ex: button(:login, id: 'button_id') lib/screen-object/accessors/element.rb:#{__LINE__}"
+          #warn "#{DateTime.now.strftime("%F %T")} WARN ScreenObject Element [DEPRECATION] Passing the locator as a single string with locator type and value sepaarted by ~ is deprecated and will no longer work in version 2.0.0. Use a hash instead (ex: button(:login, id: 'button_id') lib/screen-object/accessors/element.rb:#{__LINE__}"
           @locator=locator.split("~")
         elsif locator.is_a?(Hash)
           @locator=locator.first
@@ -45,6 +45,7 @@ module ScreenObject
       end
 
       def exists?
+        driver.no_wait
         begin
           element.displayed?
         rescue
@@ -64,6 +65,22 @@ module ScreenObject
         %w[name resource-id value text]
       end
 
+      # method for returning element position and size.
+      # @return [hash]
+      def get_position
+        my_element = element.rect
+        {
+            start_x: my_element.x,
+            end_x: my_element.x + my_element.width,
+            start_y: my_element.y,
+            end_y: my_element.y + my_element.height,
+            height: my_element.height,
+            width: my_element.width
+        }
+      rescue RuntimeError => err
+        raise("Error Details: #{err}")
+      end
+
       def dynamic_xpath(text)
         concat_attribute=[]
         element_attributes.each{|i| concat_attribute << %Q(contains(@#{i}, '#{text}'))}
@@ -81,73 +98,129 @@ module ScreenObject
         end
       end
 
-      def scroll
-        $driver.execute_script 'mobile: scrollTo',:element => element.ref
-        # $driver.execute_script("mobile: scroll",:direction => direction.downcase, :element => element.ref)
-      end
-
-      def scroll_to_text(text)
-        $driver.scroll_to(text)
-      end
-
-      def scroll_to_exact_text(text)
-        $driver.scroll_to_exact(text)
-      end
-
-      def scroll_for_element_click
-        if element.displayed?
-          element.click
+      # method for checking if element is visible.
+      # Some locators on ios and android return true/false but a few would generate and error.
+      # this is the reason why there is a else condition and a rescue.
+      # @param [direction] 'default :down, :up'
+      # @return [boolean]
+      def element_visible?(direction = :down)
+        default_wait = driver.default_wait
+        driver.no_wait
+        if exists?
+          driver.set_wait(default_wait)
+          ScreenObject::Accessors.scroll(direction)
+          true
         else
-          scroll
-          element.click
+          ScreenObject::Accessors.scroll(direction)
+          false
         end
+      rescue
+        ScreenObject::Accessors.scroll(direction)
+        false
+      end
+
+      # method for scrolling until element is visible.
+      # this will NOT return any value.
+      # @param [direction] 'Down', 'up'
+      def scroll_element_to_view(direction = :down, time_out = 30)
+        ScreenObject::Accessors.wait_until(time_out,'Unable to find element',&->{element_visible?(direction)})
+      end
+
+      # method for scrolling until element is visible and click.
+      # this will NOT return any value.
+      # @param [direction] 'Down', 'up'
+      def scroll_element_to_view_click(direction= :down, time_out = 40)
+        ScreenObject::Accessors.wait_until(time_out,'Unable to find element',&->{element_visible?(direction)})
+        click
+      end
+
+      # method for swiping a specific element on the screen.
+      # this is the reason why there is a else condition and a rescue.
+      # @param [direction] :down, :up , :left, :right
+      # @param [duration] 1000 milliseconds
+
+      def swipe_screen_element(direction = :down, duration = 1000)
+        my_element = element.rect
+        start_x = my_element.x
+        end_x = my_element.x + my_element.width
+        start_y = my_element.y
+        end_y = my_element.y + my_element.height
+        height = my_element.height
+        loc = case direction
+              when :up then    [end_x * 0.5, (start_y + (height * 0.2)), end_x * 0.5, (end_y - (height * 0.2)), duration]
+              when :down then  [end_x * 0.5, (end_y - (height * 0.2)), start_x * 0.5, (start_y + (height * 0.3)), duration]
+              when :left then  [end_x * 0.9,  end_y - (height / 2), start_x, end_y - (height / 2), duration]
+              when :right then [end_x * 0.1, end_y - (height / 2), end_x * 0.9, end_y - (height / 2), duration]
+              else
+                raise('Only upwards and downwards scrolling are supported')
+              end
+        ScreenObject::Accessors.gesture(loc)
+      end
+
+      def scroll_element_down
+        swipe_screen_element(:down)
+      end
+
+      def scroll_element_up
+        swipe_screen_element(:up)
+      end
+
+      def swipe_element_left
+        swipe_screen_element(:left, 2000)
+      end
+
+      def swipe_element_right
+        swipe_screen_element(:right, 2000)
       end
 
       def scroll_for_dynamic_element_click (expected_text)
         if dynamic_xpath(expected_text).displayed?
-          element.click
-        else
-          scroll
-          element.click
-        end
-      end
-
-      def click_text(text)
-        if exists?
           click
         else
-          scroll_to_text(text)
-          element.click
-        end
-      end
-
-      def click_dynamic_text(text)
-        if dynamic_text_exists?(text)
-          element.click
-        else
-          scroll_to_text(text)
-          element.click
-        end
-      end
-
-      def click_exact_text(text)
-        if exists?
+          ScreenObject::Accessors.scroll
           click
-        else
-          scroll_to_exact_text(text)
-          element.click
         end
       end
 
-      def click_dynamic_exact_text(text)
-        if dynamic_text_exists?(text)
-          element.click
+      # Find the first element containing value
+      # @param value [String] the value to search for
+      # @return [Element]
+      def get_element_by_text(value)
+        if value.to_s.strip.empty?
+          raise('parameter for get_element_by_text function cannot be empty string')
         else
-          scroll_to_exact_text(text)
-          element.click
+          driver.find(value)
         end
       end
 
+      # Find the first element exactly matching value
+      # @param value [String] the value to search for
+      # @return [Element]
+      def get_element_by_exact_text(value)
+        if value.to_s.strip.empty?
+          raise('parameter for get_element_by_exact_text function cannot be empty string')
+        else
+          driver.find_exact(value)
+        end
+      end
+
+      def has_text(text)
+        items = elements
+        items.each do |item|
+          if item.is_a? String
+            text_value = if driver.device_is_android?
+                           item.text.strip
+                         else
+                           item.value.strip
+                         end
+            return true if text_value.casecmp?(text.strip.to_s)
+          else
+            text_value = item.text
+            return true if text_value == text
+          end
+          false
+        end
+      end
     end
   end
 end
