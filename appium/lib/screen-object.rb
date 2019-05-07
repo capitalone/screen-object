@@ -160,7 +160,7 @@ module ScreenObject
     if text_val.to_s.strip.empty?
       raise('parameter for get_element_by_text function cannot be empty string')
     else
-      driver.find(text_val) if driver.device_is_ios?
+      driver.find(text_val)
     end
   end
 
