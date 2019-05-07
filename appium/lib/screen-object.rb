@@ -156,32 +156,36 @@ module ScreenObject
     false
   end
 
-  def click_dynamic_text(text)
-    if dynamic_text_exists?(text)
-      click
+  def get_element_by_text(text_val)
+    if text_val.to_s.strip.empty?
+      raise('parameter for get_element_by_text function cannot be empty string')
     else
-      scroll_text_to_view(text)
-      click
+      driver.find(text_val) if driver.device_is_ios?
     end
+  end
+
+  def get_element_by_exact_text(text_val)
+    if text_val.to_s.strip.empty?
+      raise('parameter for get_element_by_text function cannot be empty string')
+    else
+      driver.find_exact(text_val)
+    end
+  end
+
+  def find_webview_text(value)
+    driver.string_visible_exact('*', value)
+  rescue RuntimeError => e
+    raise("Could not find text \"#{value}\" on the current screen: #{e}")
+  end
+
+  def click_text(text)
+    get_element_by_text(text).click
   end
 
   def click_exact_text(text)
-    if exists?
-      click
-    else
-      driver.scroll_to(text)
-      click
-    end
+    get_element_by_exact_text(text).click
   end
 
-  def click_dynamic_exact_text(text)
-    if dynamic_text_exists?(text)
-      click
-    else
-      scroll_text_to_view(text)
-      click
-    end
-  end
 
   def drag_and_drop_element(source_locator,source_locator_value,target_locator,target_locator_value)
     l_draggable = driver.find_element(source_locator,source_locator_value)
@@ -192,7 +196,7 @@ module ScreenObject
 
   def keyboard_hide
     begin
-    driver.hide_keyboard
+      driver.hide_keyboard
     rescue
       false
     end
