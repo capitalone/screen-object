@@ -156,32 +156,47 @@ module ScreenObject
     false
   end
 
-  def get_element_by_text(text_val)
-    if text_val.to_s.strip.empty?
+  # Find the first element containing value
+  # @param value [String] the value to search for
+  # @return [Element]
+  def get_element_by_text(value)
+    if value.to_s.strip.empty?
       raise('parameter for get_element_by_text function cannot be empty string')
     else
-      driver.find(text_val)
+      driver.find(value)
     end
   end
 
-  def get_element_by_exact_text(text_val)
-    if text_val.to_s.strip.empty?
-      raise('parameter for get_element_by_text function cannot be empty string')
+  # Find the first element exactly matching value
+  # @param value [String] the value to search for
+  # @return [Element]
+  def get_element_by_exact_text(value)
+    if value.to_s.strip.empty?
+      raise('parameter for get_element_by_exact_text function cannot be empty string')
     else
-      driver.find_exact(text_val)
+      driver.find_exact(value)
     end
   end
 
-  def find_webview_text(value)
+  # Create an object to exactly match the first element with target value
+  # @param value [String] the value to search for
+  # @return [String]
+  def webview_text_visible?(value)
     driver.string_visible_exact('*', value)
   rescue RuntimeError => e
     raise("Could not find text \"#{value}\" on the current screen: #{e}")
   end
 
+  # Click on the first element with target value that contains search value
+  # @param text [String] the value to search for
+  # @return [Nil]
   def click_text(text)
     get_element_by_text(text).click
   end
 
+  # Click exact text that matches the first element with target value
+  # @param text [String] the value to search for
+  # @return [Nil]
   def click_exact_text(text)
     get_element_by_exact_text(text).click
   end
