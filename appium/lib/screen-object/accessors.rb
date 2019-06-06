@@ -44,6 +44,13 @@ module ScreenObject
     # elements class generates all the methods related to general elements operation
     def element(name, locator)
 
+      define_method("#{name}_click_when_present") do |&b|
+        Timeout.timeout(3) do
+          sleep 0.5 until send("#{name}?")
+        end
+        b.call
+      end
+
       # generates method for checking the existence of the button.
       # this method will return true or false based on object displayed or not.
       # @example check if 'Submit' button exists on the screen.
