@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   #s.add_runtime_dependency 'appium_lib', '~> 7.0', '>= 7.0.0'
-  s.add_runtime_dependency 'appium_lib', '~> 8.0.2'
+  s.add_runtime_dependency 'appium_lib', '~> 9.10'
   s.add_runtime_dependency 'page_navigation', '~> 0.9'
   s.add_runtime_dependency 'childprocess', '~> 0.5'
 
